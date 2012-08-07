@@ -5,17 +5,17 @@
 return array(
     'doctrine' => array(
         'driver' => array(
-            'mcn_predefined_entities' => array(
+            'mcn_entities' => array(
                 'class'     => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
                 'cache'     => 'array',
                 'paths'     => array(
-                    'module/MCN/src/MCN/Entity'
+                    'vendor/mcn/mcn/src/MCN/Entity'
                 )
             ),
 
             'orm_default' => array(
                 'drivers' => array(
-                    'MCN\Entity' => 'mcn_predefined_entities'
+                    'MCN\Entity' => 'mcn_entities'
                 )
             )
         )
