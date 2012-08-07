@@ -1,0 +1,47 @@
+<div class="box" style="width: 680px;">
+    <h1 class="box_title">List på alla kategorier</h1>
+
+    <div class="box_content">
+        <table class="table_rows">
+            <thead>
+                <tr>
+                    <th style="width: 100px;">Namn</th>
+                    <th>Titel</th>
+                    <th>Beskrivning</th>
+                    <th>Nyckelord</th>
+                    <th>Uppdaterades</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($this->categories as $category): ?>
+                <tr class="<?php echo $this->cycle(array('table_row_dark', ''))->next(); ?>">
+                    <td>
+                        <?php echo $category->getName(); ?>
+                    </td>
+                    <td>
+                        <?php echo empty($category['title']) ? 'Nej' : 'Ja'; ?>
+                    </td>
+                    <td>
+                        <?php echo empty($category['description']) ? 'Nej' : 'Ja'; ?>
+                    </td>
+                    <td>
+                        <?php echo empty($category['keywords']) ? 'Nej' : 'Ja'; ?>
+                    </td>
+                    <td>
+                        <?php
+                        echo $category->getUpdatedAt()
+                                      ->format('Y-m-d H:i:s');
+                        ?>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->url('admin/html-head/category/edit', $category->toArray()); ?>">
+                            <img src="/images/file_edit.png" alt="Redigera">
+                        </a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>

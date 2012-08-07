@@ -1,0 +1,65 @@
+<?php
+extract($this->vars()->getArrayCopy());
+
+if (empty($variables)) {
+
+    return;
+}
+
+$values = array(
+    'integer' => 1,
+    'string'  => 1,
+    'array'   => 3,
+    'list_object' => 2
+);
+
+// Mucho sexy sort function
+uksort($variables, function($a, $b) use ($variables, $values) {
+
+    if ($variables[$a] == $variables[$b]) {
+
+        return strcmp($a, $b);
+    }
+
+    if (is_array($variables[$a])) {
+
+        $a = 'array';
+    } else {
+
+        $a = $variables[$a];
+    }
+
+    if (is_array($variables[$b])) {
+
+        $b = 'array';
+    } else {
+
+        $b = $variables[$b];
+    }
+
+    return ($values[$a] > $values[$b]);
+});
+?>
+<table class="table_rows">
+    <tbody>
+    <?php foreach($variables as $var => $type): ?>
+    <tr<?php echo is_array($type) ? ' style="border:1px solid #000000;"' : ''; ?>>
+        <td>
+            <div class="variable"><?php echo $var; ?></div>
+        </td>
+        <td>
+            <?php
+            if (is_array($type)) {
+
+                echo $this->partial('mcn/list-available-variables', array('variables' => $type));
+
+            } else {
+
+                echo $type;
+            }
+            ?>
+        </td>
+    </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>

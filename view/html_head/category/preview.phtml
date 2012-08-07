@@ -1,0 +1,20 @@
+<div class="box">
+    <h1 class="box_title">Förhandsgranskning av <?php echo $this->category->getName(); ?></h1>
+
+    <div class="box_content">
+        <h2>Rubrik</h2>
+        <p>
+            <?php echo $this->category->getTitle(); ?>
+        </p>
+
+        <h2>Description</h2>
+        <p>
+            <?php echo $this->category->getDescription(); ?>
+        </p>
+
+        <h2>Keywords</h2>
+        <p>
+            <?php echo $this->category->getKeywords(); ?>
+        </p>
+    </div>
+</div>
