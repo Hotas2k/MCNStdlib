@@ -9,6 +9,10 @@
         {
             "name": "Antoine Hedgecock",
             "email": "antoine@pmg.se"
+        },
+        {
+            "name": "Jonas Eriksson",
+            "email": "jonas@pmg.se"
         }
     ],
     "require": {
