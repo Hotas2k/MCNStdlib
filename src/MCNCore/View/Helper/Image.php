@@ -70,7 +70,7 @@ class Image extends AbstractHelper
         // If no alt is specified then default to the image name when uploaded
         $alt = empty($alt) ? $object->getName() : $alt;
 
-        return sprintf('<img src="%s" alt="%s"/>', $image->getResolution($resolution), $alt);
+        return sprintf('<img src="/%s" alt="%s"/>', $image->getResolution($resolution), $alt);
     }
 
     /**
