@@ -14,7 +14,10 @@ class DateFieldset extends Fieldset implements InputProviderInterface
 {
     public function __construct()
     {
-        parent::__construct('company_listing_fieldset');
+        parent::__construct('mcncore_form_fieldset_date');
+
+        $this->setObject(new \DateTime())
+             ->setHydrator(new \MCNCore\Form\Hydrator\DateFieldset($this->getName()));
 
         $this->add(array(
             'name' => 'year',
@@ -54,4 +57,5 @@ class DateFieldset extends Fieldset implements InputProviderInterface
             )
         );
     }
+
 }

@@ -22,4 +22,9 @@ trait ViewableTrait
      * @ORM\ManyToMany(targetEntity="MCN\Entity\View")
      */
     protected $views;
+
+    public function addView($entity)
+    {
+        $this->views->add($entity);
+    }
 }

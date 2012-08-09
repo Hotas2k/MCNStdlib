@@ -23,9 +23,15 @@ class PageController extends AbstractActionController
 
     public function listAction()
     {
+        $options = array(
+            'sort' => array(
+                'name' => 'asc'
+            )
+        );
+
         $vm = new ViewModel();
         $vm->setTemplate('mcn/html_head/page/list');
-        $vm->setVariable('pages', $this->getService()->fetchAll());
+        $vm->setVariable('pages', $this->getService()->fetchAll($options));
 
         return $vm;
     }

@@ -170,7 +170,7 @@ trait SearchTrait
         $this->client->setMatchMode(SPH_MATCH_EXTENDED);
 
         // Process query fields, uses an external method to allow for recursion
-        $queries = $this->processQueryFields($parameters['configuration']['query_fields']);
+        $queries = $this->processQueryFields($parameters['configuration']['query_fields'], $parameters['values']);
 
         // Apply the current query filters
         $this->processQueryFilters($parameters['configuration']['filters'], $parameters['values']);
@@ -187,13 +187,13 @@ trait SearchTrait
      *
      * @return void
      */
-    private function processQueryFilters(array $filters, array $values)
+    private function processQueryFilters(array $filters, $values)
     {
         foreach($filters as $index => $filter)
         {
             if (is_array($filter)) {
 
-                $this->processQueryFields($filter, $values[$index]);
+                $this->processQueryFilters($filter, $values[$index]);
 
                 continue;
             }
@@ -205,7 +205,22 @@ trait SearchTrait
                 );
             }
 
-            call_user_func_array($filter, array($this->client, $values[$index]));
+            // Incase we need to pass multiple parameters to the filter
+            if (strpos($index, ',') !== false) {
+
+                $parameters = array($this->client);
+
+                foreach(explode(',', $index) as $param)
+                {
+                    $parameters[] = $values[$param];
+                }
+
+                call_user_func_array($filter, $parameters);
+
+            } else {
+
+                call_user_func_array($filter, array($this->client, $values[$index]));
+            }
         }
     }
 
@@ -214,22 +229,24 @@ trait SearchTrait
      *
      * @return array
      */
-    private function processQueryFields(array $query_fields)
+    private function processQueryFields(array $query_fields, $values)
     {
         $queries = array();
 
         foreach($query_fields as $index => $fields)
         {
-            $field = isSet($parameters['values'][$index]) ? $parameters['values'][$index] : null;
+            if (is_array($fields)) {
 
-            if (is_array($field)) {
-
-                $query_fields += $this->processQueryFields($field);
+                $queries += $this->processQueryFields($query_fields[$index], $values[$index]);
 
                 continue;
             }
 
+            $field = isSet($values[$index]) ? $values[$index] : null;
+
             if (!empty($field)) {
+
+                $fields = explode(',', $fields);
 
                 $pattern = count($fields) > 1 ? '@(%s) %s' : '@%s %s';
 

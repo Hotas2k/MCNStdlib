@@ -63,7 +63,7 @@ class Hydrator implements HydratorInterface
                         break;
 
                     case Type::DATETIME:
-                        $value = $value->format('Y-m-d H:i');
+                        $value = $value->format('Y-m-d H:i:s');
                         break;
 
                     case Type::TIME:
@@ -124,7 +124,12 @@ class Hydrator implements HydratorInterface
                 {
                     case Type::DATE:
                     case Type::DATETIME:
-                        $object->offsetSet($field, DateTime::createFromFormat('U', strtotime($value)));
+                        if (! $value instanceof DateTime) {
+
+                            $value = DateTime::createFromFormat('U', strtotime($value));
+                        }
+
+                        $object->offsetSet($field, $value);
                         break;
 
                     default:
@@ -177,7 +182,6 @@ class Hydrator implements HydratorInterface
         }
 
         $values = new ArrayCollection();
-
         foreach($value as $v) {
 
             $identifiers = array();

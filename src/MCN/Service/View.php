@@ -30,14 +30,24 @@ class View
 
     public function addViewTo(ViewableInterface $object)
     {
-        $this->getRepository()
-             ->insert(
-                array(
-                     'target_id'   => $object->getId(),
-                     'target_type' => $object->getViewTargetType(),
-                     'hash'        => md5($_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'])
-                )
-             );
-    }
+        $data = array(
+            'target_id'   => $object->getId(),
+            'target_type' => $object->getViewTargetType(),
+            'hash'        => md5($_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'])
+        );
 
+        $result = $this->getRepository()
+                       ->fetchOne(array('parameters' => $data));
+
+        if (! $result) {
+
+            $view = new ViewEntity();
+            $view->fromArray($data);
+
+            $object->addView($view);
+
+            $this->em->persist($view);
+            $this->em->flush();
+        }
+    }
 }
