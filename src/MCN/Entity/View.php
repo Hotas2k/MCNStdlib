@@ -8,11 +8,11 @@
  */
 namespace MCN\Entity;
 use Doctrine\ORM\Mapping as ORM,
-    MCNCore\Object\Entity\AbstractEntity;
+    MCN\Object\Entity\AbstractEntity;
 
 
 /**
- * @category MCNCore
+ * @category MCN
  * @package Object
  * @subpackage PredefinedEntity
  *

@@ -9,7 +9,7 @@
 namespace MCN\Service;
 use Doctrine\ORM\EntityManager,
     MCN\Entity\View as ViewEntity,
-    MCNCore\Object\Entity\Behavior\ViewableInterface;
+    MCN\Object\Entity\Behavior\ViewableInterface;
 
 class View
 {

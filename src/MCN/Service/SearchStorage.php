@@ -26,7 +26,7 @@ class SearchStorage
     }
 
     /**
-     * @return \MCNCore\Object\Entity\Repository
+     * @return \MCN\Object\Entity\Repository
      */
     protected function getRepository()
     {

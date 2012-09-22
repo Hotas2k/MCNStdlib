@@ -7,12 +7,12 @@
  * @namespace
  */
 namespace MCN\Entity;
-use MCNCore\Object\Entity\AbstractEntity;
+use MCN\Object\Entity\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="MCN_search_storage")
- * @ORM\Entity(repositoryClass="MCNCore\Object\Entity\Repository")
+ * @ORM\Entity(repositoryClass="MCN\Object\Entity\Repository")
  */
 class SearchStorage extends AbstractEntity
 {

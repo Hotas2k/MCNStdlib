@@ -7,7 +7,7 @@
  * @namespace
  */
 namespace MCN\Repository;
-use MCNCore\Object\Entity\Repository;
+use MCN\Object\Entity\Repository;
 
 class View extends Repository
 {
