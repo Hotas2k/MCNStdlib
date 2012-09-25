@@ -21,7 +21,6 @@
     },
     "autoload": {
         "psr-0": {
-            "MCN":     "src/",
             "MCN": "src/"
         },
         "classmap": [
