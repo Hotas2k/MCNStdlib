@@ -3,14 +3,21 @@
  * @author Antoine Hedgecock <antoine@pmg.se>
  */
 
-/**
- * @namespace
- */
 namespace MCN\Repository;
+
 use MCN\Object\Entity\Repository;
 
+/**
+ * @category MCN
+ * @package Repository
+ */
 class View extends Repository
 {
+    /**
+     * Inserts a new view to the database if one does not already exist
+     *
+     * @param array $values
+     */
     public function insert(array $values)
     {
         $stmt = $this->manager->getConnection()
