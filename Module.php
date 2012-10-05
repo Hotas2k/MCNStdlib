@@ -6,10 +6,10 @@
 namespace MCN;
 
 use Zend\Log\Logger;
-use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\ServiceManager;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
+use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\Mvc\Router\RouteMatch;
 use MCN\View\Helper as ViewHelper;
