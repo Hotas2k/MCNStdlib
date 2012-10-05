@@ -11,12 +11,13 @@ use Zend\ServiceManager\ServiceManager;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
+use Zend\Mvc\Router\RouteMatch;
 use MCN\View\Helper as ViewHelper;
 
 /**
  * @category User
  */
-class Module implements ConfigProviderInterface, AutoloaderProviderInterface, ServiceProviderInterface
+class Module implements ConfigProviderInterface, AutoloaderProviderInterface, ServiceProviderInterface, ViewHelperProviderInterface
 {
     /**
      * Return an array for passing to Zend\Loader\AutoloaderFactory.
@@ -79,6 +80,33 @@ class Module implements ConfigProviderInterface, AutoloaderProviderInterface, Se
                     return new Service\SearchStorage(
                         $sm->get('doctrine.entitymanager.ormdefault')
                     );
+                }
+            )
+        );
+    }
+
+    /**
+     * Expected to return \Zend\ServiceManager\Config object or array to
+     * seed such an object.
+     *
+     * @return array|\Zend\ServiceManager\Config
+     */
+    public function getViewHelperConfig()
+    {
+        return array(
+            'factories' => array(
+                'sortUrl' => function($sm) {
+
+                    $helper = new View\Helper\SortUrl();
+
+                    $routeMatch = $sm->getServiceLocator()->get('application')->getMvcEvent()->getRouteMatch();
+
+                    if ($routeMatch instanceof RouteMatch) {
+
+                        $helper->setRouteMatch($routeMatch);
+                    }
+
+                    return $helper;
                 }
             )
         );

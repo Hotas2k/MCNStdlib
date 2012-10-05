@@ -17,8 +17,10 @@ trait PrependOptionTrait
             $form = $form->get($part);
         }
 
-        $options = $form->getAttribute('options');
+        $options = $form->getAttribute('value_options');
 
-        $form->setAttribute('options', $option + $options);
+
+
+        $form->setAttribute('value_options', $option + $options);
     }
 }

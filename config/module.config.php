@@ -54,6 +54,7 @@ return array(
     'controller_plugins' => array(
         'invokables' => array(
             'message'       => 'MCN\Controller\Plugin\Message',
+            'getSort'       => 'MCN\Controller\Plugin\GetSort',
             'searchStorage' => 'MCN\Controller\Plugin\SearchStorage',
         )
     ),
@@ -66,7 +67,7 @@ return array(
         ),
 
         'factories' => array(
-
+            'mcn.memcached'     => 'MCN\Factory\MemcachedFactory',
             'mcn.sphinx_client' => 'MCN\Factory\SphinxClientFactory'
         )
     ),
@@ -76,7 +77,7 @@ return array(
             'slugUrl'    => 'MCN\View\Helper\SlugUrl',
             'pagination' => 'MCN\View\Helper\Pagination',
             'stringTrim' => 'MCN\View\Helper\StringTrim',
-            'sm'         => 'MCN\View\Helper\ServiceManager'
+            'sm'         => 'MCN\View\Helper\ServiceManager',
         )
     )
 );
