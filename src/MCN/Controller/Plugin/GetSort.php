@@ -11,12 +11,14 @@ namespace MCN\Controller\Plugin;
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 
 /**
- *
+ * @category MCN
+ * @package Controller
+ * @subpackage Plugin
  */
 class GetSort extends AbstractPlugin
 {
     /**
-     * Retrieves
+     * Retrieves the sorting field and direction
      *
      * @param string $field
      * @param string $direction

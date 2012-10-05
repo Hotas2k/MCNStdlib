@@ -3,14 +3,18 @@
  * @author Antoine Hedgecock <antoine@pmg.se>
  */
 
-/**
- * @namespace
- */
-namespace MCN\Controller\Plugin;
-use Zend\ServiceManager\ServiceManager,
-    Zend\Mvc\Controller\Plugin\AbstractPlugin,
-    Zend\ServiceManager\ServiceLocatorAwareInterface;
 
+namespace MCN\Controller\Plugin;
+
+use Zend\ServiceManager\ServiceManager;
+use Zend\Mvc\Controller\Plugin\AbstractPlugin;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+
+/**
+ * @category MCN
+ * @package Controller
+ * @subpackage Plugin
+ */
 class SearchStorage extends AbstractPlugin
 {
     public function __invoke($route, $namespace)

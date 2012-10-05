@@ -2,9 +2,6 @@
     "name": "mcn/mcn",
     "description": "Mac nibblets core functionality",
     "type": "module",
-    "keywords": [
-        "zf2"
-    ],
     "authors": [
         {
             "name": "Antoine Hedgecock",
@@ -17,7 +14,6 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "zendframework/zendframework": "dev-master"
     },
     "autoload": {
         "psr-0": {
