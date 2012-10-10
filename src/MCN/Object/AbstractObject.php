@@ -7,6 +7,9 @@ namespace MCN\Object;
 
 use ArrayAccess;
 
+use Doctrine\Common\Persistence\Proxy;
+use Doctrine\Common\Collections\Collection;
+
 /**
  * @category MCN
  * @package Object
@@ -141,18 +144,19 @@ abstract class AbstractObject implements ArrayAccess
 
         foreach($vars as $key => &$var) {
 
-            if ($recursive && $var instanceof AbstractObject) {
+            if ($recursive && $var instanceof Proxy) {
 
-                if (isSet($var->__isInitialized__)) {
+                if ($var->__isInitialized()) {
 
-                    if ($var->__isInitialized__) {
+                    $var = $var->toArray(true);
+                } else {
 
-                        $var = $var->toArray(true);
-                    } else {
-
-                        unset($vars[$key]);
-                    }
+                    unset($vars[$key]);
                 }
+
+            } else if ($var instanceof Collection) {
+
+                $var = $var->toArray();
             }
         }
 
