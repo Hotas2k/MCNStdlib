@@ -79,6 +79,20 @@ class Repository extends AbstractRepository
 
                 list($field, $method) = $exp;
 
+                // The method not like does not exist so we create one
+                if ($method == 'nlike') {
+
+                    if (strstr($field, '.') !== false) {
+
+                        $qb->andWhere($expr->not($expr->like($field, $value)));
+                    } else {
+
+                        $qb->andWhere($expr->not($expr->like($this->getRootEntityAlias() . '.' . $field, $value)));
+                    }
+
+                    continue;
+                }
+
                 if (! method_exists($expr, $method)) {
 
                     throw new Exception\BadMethodCallException(

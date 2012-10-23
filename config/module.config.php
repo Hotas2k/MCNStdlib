@@ -53,8 +53,8 @@ return array(
 
     'controller_plugins' => array(
         'invokables' => array(
+            'http'          => 'MCN\Controller\Plugin\Http',
             'message'       => 'MCN\Controller\Plugin\Message',
-            'getSort'       => 'MCN\Controller\Plugin\GetSort',
             'searchStorage' => 'MCN\Controller\Plugin\SearchStorage',
         )
     ),
