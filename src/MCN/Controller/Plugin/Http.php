@@ -57,7 +57,9 @@ class Http extends AbstractPlugin
 
         if ($headers->has('Range')) {
 
-            return explode('-', substr($headers->get('Range')->getFieldValue(), 6));
+            $exp = explode('-', substr($headers->get('Range')->getFieldValue(), 6));
+
+            return array($exp[0], $exp[1] - $exp[0]);
         }
 
         return array($offset, $limit);
