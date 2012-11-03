@@ -28,7 +28,7 @@ class Http extends AbstractPlugin
      */
     public function getSort($field, $direction)
     {
-        $sort = $this->controller->params('sort', null);
+        $sort = $this->controller->params()->fromQuery('sort', null);
 
         if ($sort === null) {
 
