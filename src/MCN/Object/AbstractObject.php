@@ -144,19 +144,26 @@ abstract class AbstractObject implements ArrayAccess
 
         foreach($vars as $key => &$var) {
 
-            if ($recursive && $var instanceof Proxy) {
+            if ($recursive) {
 
-                if ($var->__isInitialized()) {
+                if ($var instanceof self) {
 
-                    $var = $var->toArray(true);
-                } else {
+                    if (!isSet($var->__isInitialized__) || $var->__isInitialized__) {
 
-                    unset($vars[$key]);
+                        $var = $var->toArray(true);
+
+                    } else {
+
+                        unset($vars[$key]);
+                    }
+
+                } else if ($var instanceof Collection) {
+
+                    if (! $var->isInitialized()) {
+
+                        unset($vars[$key]);
+                    }
                 }
-
-            } else if ($var instanceof Collection) {
-
-                $var = $var->toArray();
             }
         }
 
