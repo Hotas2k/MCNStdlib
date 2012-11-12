@@ -211,12 +211,12 @@ class Repository extends AbstractRepository
 
             $qb->add(
                     'from',
-                    $this->metadata->rootEntityName . ' ' . $alias .
+                    $this->metadata->name. ' ' . $alias .
                     ' INDEX BY ' . $alias . '.' . $qi->getIndexBy()
                 );
         } else {
 
-            $qb->from($this->metadata->rootEntityName, $alias);
+            $qb->from($this->metadata->name, $alias);
         }
 
         // Check if we want all fields or just some specific
@@ -318,6 +318,8 @@ class Repository extends AbstractRepository
 
         $query = $this->getBaseQuery($qi);
         $query = $this->getQuery($query, $qi);
+
+        var_dump($query->getSql()); exit;
 
         $result = $query->getResult($qi->getHydration());
 

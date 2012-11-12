@@ -6,7 +6,7 @@
 namespace MCN\Object;
 
 use ArrayAccess;
-
+use MCN\Stdlib\NamingConvention;
 use Doctrine\Common\Persistence\Proxy;
 use Doctrine\Common\Collections\Collection;
 
@@ -21,19 +21,9 @@ abstract class AbstractObject implements ArrayAccess
      * @param $field
      * @return string
      */
-    static public function toCamelCase($field)
-    {
-        return implode('', array_map('ucfirst', explode('_', $field)));
-    }
-
-    /**
-     * @static
-     * @param $field
-     * @return string
-     */
     static public function fieldToGetterMethod($field)
     {
-        return 'get' . static::toCamelCase($field);
+        return 'get' . NamingConvention::toCamelCase($field);
     }
 
     /**
@@ -43,7 +33,7 @@ abstract class AbstractObject implements ArrayAccess
      */
     static public function fieldToSetterMethod($field)
     {
-        return 'set' . static::toCamelCase($field);
+        return 'set' . NamingConvention::toCamelCase($field);
     }
 
     /**
