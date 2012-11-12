@@ -319,8 +319,6 @@ class Repository extends AbstractRepository
         $query = $this->getBaseQuery($qi);
         $query = $this->getQuery($query, $qi);
 
-        var_dump($query->getSql()); exit;
-
         $result = $query->getResult($qi->getHydration());
 
         // Query info specified to count available rows
