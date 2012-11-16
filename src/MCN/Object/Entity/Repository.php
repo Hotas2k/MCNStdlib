@@ -9,18 +9,18 @@
 namespace MCN\Object\Entity;
 
 // MCN classes
-use MCN\Object\QueryInfo,
-    MCN\Object\Exception,
-    MCN\Pagination\Pagination,
-    MCN\Object\AbstractRepository;
+use MCN\Object\QueryInfo;
+use MCN\Object\Exception;
+use MCN\Pagination\Pagination;
+use MCN\Object\AbstractRepository;
 
 // Doctrine classes
-use Doctrine\ORM\Query,
-    Doctrine\ORM\Query\Expr,
-    Doctrine\ORM\QueryBuilder,
-    Doctrine\ORM\NoResultException,
-    Doctrine\ORM\Query\ResultSetMapping,
-    Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @category MCN
@@ -319,44 +319,17 @@ class Repository extends AbstractRepository
         $query = $this->getBaseQuery($qi);
         $query = $this->getQuery($query, $qi);
 
-        $result = $query->getResult($qi->getHydration());
 
         // Query info specified to count available rows
         if ($qi->getCountAvailableRows()) {
 
-            $countQuery = clone $query;
-            $countQuery->setParameters($query->getParameters());
+            $paginator = new Paginator($query);
 
-            foreach ($query->getHints() as $name => $value)
-            {
-                $countQuery->setHint($name, $value);
-            }
-
-            $platform = $countQuery->getEntityManager()->getConnection()->getDatabasePlatform(); // law of demeter win
-
-            $rsm = new ResultSetMapping();
-            $rsm->addScalarResult($platform->getSQLResultCasing('dctrn_count'), 'count');
-
-            $countQuery->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, 'Doctrine\ORM\Tools\Pagination\CountOutputWalker');
-            $countQuery->setResultSetMapping($rsm);
-            $countQuery->setFirstResult(null)
-                       ->setMaxResults(null);
-
-            try {
-                $data  =  $countQuery->getScalarResult();
-                $data  = array_map('current', $data);
-                $count = array_sum($data);
-
-            } catch(NoResultException $e) {
-
-                $count = 0;
-            }
-
-            return Pagination::create($result, $count, $qi);
+            return Pagination::create($paginator->getIterator()->getArrayCopy(), $paginator->count(), $qi);
 
         } else {
 
-            return $result;
+            return $query->getResult($qi->getHydration());
         }
     }
 }
