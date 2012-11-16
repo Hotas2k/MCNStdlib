@@ -325,7 +325,10 @@ class Repository extends AbstractRepository
 
             $paginator = new Paginator($query);
 
-            return Pagination::create($paginator->getIterator()->getArrayCopy(), $paginator->count(), $qi);
+            $count  = $paginator->count();
+            $result = $query->getResult($qi->getHydration());
+
+            return Pagination::create($result, $count, $qi);
 
         } else {
 
