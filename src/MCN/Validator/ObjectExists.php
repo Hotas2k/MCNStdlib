@@ -42,11 +42,6 @@ class ObjectExists extends AbstractValidator
     protected $manager;
 
     /**
-     * @var bool
-     */
-    private $isCloned = false;
-
-    /**
      * @var string
      */
     protected $field;
@@ -59,25 +54,6 @@ class ObjectExists extends AbstractValidator
     public function setObjectManager($manager)
     {
         $this->manager = $manager;
-    }
-
-    /**
-     *
-     */
-    public function __clone()
-    {
-        $this->isCloned = true;
-    }
-
-    /**
-     * @throws Exception\RuntimeException
-     */
-    private function checkIfCloned()
-    {
-        if (!$this->isCloned) {
-
-            throw new Exception\RuntimeException('Options cannot be passed before cloning this object.');
-        }
     }
 
     /**
@@ -100,6 +76,13 @@ class ObjectExists extends AbstractValidator
             throw new Exception\InvalidArgumentException('Only an object or string with a FQCN is allowed.');
         }
 
+        if (! class_exists($object, true)) {
+
+            throw new Exception\InvalidArgumentException(
+                sprintf('Could not load the class: %s', $object)
+            );
+        }
+
         $this->object = $object;
 
         return $this;
@@ -120,8 +103,6 @@ class ObjectExists extends AbstractValidator
      */
     public function setField($property)
     {
-        $this->checkIfCloned();
-
         $this->field = $property;
 
         return $this;
@@ -149,8 +130,6 @@ class ObjectExists extends AbstractValidator
      */
     public function isValid($value)
     {
-        $this->checkIfCloned();
-
         $result = $this->manager->getRepository($this->object, $value);
 
         $options = array(

@@ -54,6 +54,11 @@ class Module implements ConfigProviderInterface, AutoloaderProviderInterface, Se
     public function getServiceConfig()
     {
         return array(
+            'shared' => array(
+
+                'mcn.validator.object_exists' => false
+            ),
+
             'factories' => array(
                 'mcn.object.hydrator'         => function($sm) {
 
