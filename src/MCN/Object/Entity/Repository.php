@@ -134,7 +134,7 @@ class Repository extends AbstractRepository
             }
 
             // default parameters for join
-            $joinType          = isSet($options['joinType']) ? $options['joinType'] : Expr\Join::LEFT_JOIN;
+            $joinType          = isSet($options['joinType']) ? strtoupper($options['joinType']) : Expr\Join::LEFT_JOIN;
             $joinCondition     = isSet($options['joinCondition']) ? $options['joinCondition'] : null;
             $joinConditionType = isSet($options['joinContitionType']) ? $options['joinContitionType'] : null;
             $joinIndexBy       = isSet($options['indexBy']) ? $joinAlias . '.' . $options['indexBy'] : null;
@@ -270,14 +270,14 @@ class Repository extends AbstractRepository
         if (is_array($qi)) {
 
             $qi = new QueryInfo($qi);
+        }
 
-        } else {
-            if (!$qi instanceof QueryInfo) {
+        // validate the query info object
+        if (! $qi instanceof QueryInfo) {
 
-                throw new Exception\InvalidArgumentException(
-                    sprintf('%s required the first argument be an array or an instance of QueryInfo', __METHOD__)
-                );
-            }
+            throw new Exception\InvalidArgumentException(
+                sprintf('%s required the first argument be an array or an instance of QueryInfo', __METHOD__)
+            );
         }
 
         $query = $this->getBaseQuery($qi);
@@ -286,8 +286,11 @@ class Repository extends AbstractRepository
         try {
 
             return $query->getSingleResult();
+
         } catch(NonUniqueResultException $e) {
+
         } catch(NoResultException $e) {
+
         }
 
         return null;
@@ -297,7 +300,8 @@ class Repository extends AbstractRepository
      * Retrieve a single object using the specified query information
      *
      * @throws \MCN\Object\Exception\InvalidArgumentException
-     * @param mixed $qi
+     *
+     * @param array|\MCN\Object\QueryInfo $qi
      *
      * @return Pagination|array
      */
@@ -306,33 +310,35 @@ class Repository extends AbstractRepository
         if (is_array($qi)) {
 
             $qi = new QueryInfo($qi);
-
-        } else {
-            if (!$qi instanceof QueryInfo) {
-
-                throw new Exception\InvalidArgumentException(
-                    sprintf('%s required the first argument be an array or an instance of QueryInfo', __METHOD__)
-                );
-            }
         }
 
+        // validate the query info object
+        if (! $qi instanceof QueryInfo) {
+
+            throw new Exception\InvalidArgumentException(
+                sprintf('%s required the first argument be an array or an instance of QueryInfo', __METHOD__)
+            );
+        }
+
+        // get the base query
         $query = $this->getBaseQuery($qi);
-        $query = $this->getQuery($query, $qi);
 
+        // execute the query
+        $result = $this->getQuery($query, $qi)->getResult($qi->getHydration());
 
-        // Query info specified to count available rows
-        if ($qi->getCountAvailableRows()) {
+        // Check we we want to count available rows
+        if (! $qi->getCountAvailableRows()) {
 
-            $paginator = new Paginator($query);
-
-            $count  = $paginator->count();
-            $result = $query->getResult($qi->getHydration());
-
-            return Pagination::create($result, $count, $qi);
-
-        } else {
-
-            return $query->getResult($qi->getHydration());
+            return $result;
         }
+
+        // create a pagination instance of the query
+        $pagination = new Paginator($query);
+
+        // get the count
+        $count= $pagination->count();
+
+        // return the result
+        return Pagination::create($result, $count, $qi);
     }
 }
