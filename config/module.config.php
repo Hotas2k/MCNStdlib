@@ -3,24 +3,6 @@
  * @author Antoine Hedgecock
  */
 return array(
-    'doctrine' => array(
-        'driver' => array(
-            'mcn_entities' => array(
-                'class'     => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-                'cache'     => 'array',
-                'paths'     => array(
-                    'vendor/mcn/mcn/src/MCN/Entity'
-                )
-            ),
-
-            'orm_default' => array(
-                'drivers' => array(
-                    'MCN\Entity' => 'mcn_entities'
-                )
-            )
-        )
-    ),
-
     'mcn' => array(
 
         'logger' => array(
