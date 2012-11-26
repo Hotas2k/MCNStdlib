@@ -145,7 +145,7 @@ class Repository extends AbstractRepository
                 $relation = $this->getRootEntityAlias() . '.' . $relation;
             }
 
-            switch($joinType)
+            switch ($joinType)
             {
                 case Expr\Join::LEFT_JOIN:
                     $qb->leftJoin($relation, $joinAlias, $joinConditionType, $joinCondition, $joinIndexBy);
@@ -168,17 +168,59 @@ class Repository extends AbstractRepository
         return $this;
     }
 
+    /**
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @param \MCN\Object\QueryInfo      $qi
+     */
     private function addSortToQuery(QueryBuilder $qb, QueryInfo $qi)
     {
         $sort = $qi->getSort();
 
-        foreach($sort as $field => $direction)
+        foreach ($sort as $field => $direction)
         {
-            if ($this->metadata->hasField($field)) {
+            if (strpos($field, '.') === false) {
 
-                $qb->addOrderBy($this->getRootEntityAlias() . '.' . $field, $direction);
+                if ($this->metadata->hasField($field)) {
 
-                unset($sort[$field]);
+                    $qb->addOrderBy($this->getRootEntityAlias() . '.' . $field, $direction);
+
+                    unset($sort[$field]);
+                }
+            } else {
+
+                list($sortRelation, $field) = explode('.', $field);
+
+                $join = $qb->getDQLPart('join');
+
+
+                /**
+                 * @var $join Expr\Join
+                 * @var $from Expr\From
+                 */
+                foreach ($join[$qb->getRootAliases()[0]] as $join) {
+
+                    if ($join->getAlias() == $sortRelation) {
+
+                        list ($joinAlias, $joinRelation) = explode('.', $join->getJoin());
+
+                        foreach($qb->getDQLPart('from') as $from) {
+
+                            if ($from->getAlias() == $joinAlias) {
+
+                                $meta = $this->manager->getClassMetadata($from->getFrom());
+                                $meta = $meta->getAssociationMapping($joinRelation);
+                                $meta = $this->manager->getClassMetadata($meta['targetEntity']);
+
+                                if ($meta->hasField($field)) {
+
+                                    $qb->addOrderBy($sortRelation . '.' . $field, $direction);
+
+                                    break 2;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -239,7 +281,7 @@ class Repository extends AbstractRepository
 
     /**
      * @param \Doctrine\ORM\QueryBuilder $qb
-     * @param \MCN\Object\QueryInfo     $q
+     * @param \MCN\Object\QueryInfo      $q
      *
      * @return \Doctrine\ORM\Query
      */

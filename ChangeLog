@@ -1,6 +1,7 @@
 2.0.0
 
 Removed all legacy code and stuff that no longer belongs in the system
+MCN\Object\Entity\Repository now supports sorting on relations as well as the root entity.
 
 1.0.3
 
