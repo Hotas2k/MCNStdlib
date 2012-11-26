@@ -21,14 +21,22 @@ class Http extends AbstractPlugin
     /**
      * Retrieves the sorting field and direction
      *
-     * @param string $field
-     * @param string $direction
+     * @param string  $field
+     * @param string  $direction
+     * @param boolean $fromQuery
      *
      * @return array
      */
-    public function getSort($field, $direction)
+    public function getSort($field, $direction, $fromQuery = false)
     {
-        $sort = trim($this->controller->params()->fromQuery('sort', null));
+        if ($fromQuery) {
+
+            $sort = trim($this->controller->params()->fromQuery('sort', null));
+
+        } else {
+
+            $sort = trim($this->controller->params('sort', null));
+        }
 
         if ($sort === null) {
 

@@ -1,21 +1,19 @@
 <?php
 /**
  * @author Antoine Hedgecock <antoine@pmg.se>
+ * @author Jonas Eriksson <jonas@pmg.se>
  */
 
-/**
- * @namespace
- */
 namespace MCN\Object;
 
+use Zend\Stdlib\AbstractOptions;
+
 /**
- * Object passed that should be passed to a object repository allowing a simple abstract of query information
- *
  * @category PMG
  * @package Entity
  * @subpackage Repository
  */
-class QueryInfo
+class QueryInfo extends AbstractOptions
 {
     /**
      * Sorts ascending
@@ -90,7 +88,7 @@ class QueryInfo
     protected $cache = null;
 
     /**
-     * The fields that the query should retrive
+     * The fields that the query should retrieve
      *
      * @var array
      */
@@ -127,49 +125,6 @@ class QueryInfo
      * @var null|integer
      */
     protected $indexBy = null;
-
-    /**
-     * @param Zend_Config|array $options
-     * @return void
-     */
-    public function __construct($options = array())
-    {
-        // Allow support for zend_config
-        if ($options instanceof \Zend_Config) {
-
-            $options = $options->toArray();
-        }
-
-        $this->setOptions($options);
-    }
-
-    /**
-     * @param array $options
-     * @return QueryRequirements fluent interface
-     */
-    public function setOptions(Array $options)
-    {
-        foreach($options as $option => $value) {
-
-            $method = 'set' . ucfirst($option);
-
-            if (method_exists($this, $method)) {
-
-                $this->$method($value);
-            } else {
-
-                throw new \InvalidArgumentException(
-                    sprintf(
-                        'Unknown method %s being called on object %s',
-                        $method,
-                        __CLASS__
-                    )
-                );
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @param $bool

@@ -71,20 +71,6 @@ class Module implements ConfigProviderInterface, AutoloaderProviderInterface, Se
                     $validator->setObjectManager($sm->get('doctrine.entitymanager.ormdefault'));
 
                     return $validator;
-                },
-
-                'mcn.service.view'               => function($sm) {
-
-                    return new Service\View(
-                        $sm->get('doctrine.entitymanager.ormdefault')
-                    );
-                },
-
-                'mcn.service.search_storage'     => function($sm) {
-
-                    return new Service\SearchStorage(
-                        $sm->get('doctrine.entitymanager.ormdefault')
-                    );
                 }
             )
         );

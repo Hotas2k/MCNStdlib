@@ -37,7 +37,6 @@ return array(
         'invokables' => array(
             'http'          => 'MCN\Controller\Plugin\Http',
             'message'       => 'MCN\Controller\Plugin\Message',
-            'searchStorage' => 'MCN\Controller\Plugin\SearchStorage',
         )
     ),
 
