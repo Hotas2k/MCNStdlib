@@ -79,20 +79,25 @@ class Repository extends AbstractRepository
 
                 list($field, $method) = $exp;
 
+                $field = strstr($field, '.') !== false ? $field : $this->getRootEntityAlias() . '.' . $field;
+
+                // check if we want to apply something to the field first
+                if (strstr($field, '|') !== false) {
+
+                    list ($field, $func) = explode('|', $field);
+
+                    $field = $expr->{$func}($field);
+                }
+
                 // The method not like does not exist so we create one
                 if ($method == 'nlike') {
 
-                    if (strstr($field, '.') !== false) {
-
-                        $qb->andWhere($expr->not($expr->like($field, $value)));
-                    } else {
-
-                        $qb->andWhere($expr->not($expr->like($this->getRootEntityAlias() . '.' . $field, $value)));
-                    }
+                    $qb->andWhere($expr->not($expr->like($field, $value)));
 
                     continue;
                 }
 
+                // validate function
                 if (! method_exists($expr, $method)) {
 
                     throw new Exception\BadMethodCallException(
@@ -100,13 +105,8 @@ class Repository extends AbstractRepository
                     );
                 }
 
-                if (strstr($field, '.') !== false) {
-
-                    $qb->andWhere($expr->$method($field, $value));
-                } else {
-
-                    $qb->andWhere($expr->$method($this->getRootEntityAlias() . '.' . $field, $value));
-                }
+                // append expression
+                $qb->andWhere($expr->$method($field, $value));
             }
         }
 
