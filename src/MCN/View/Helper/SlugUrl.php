@@ -55,10 +55,12 @@ class SlugUrl extends AbstractHelper implements ServiceLocatorAwareInterface
             $object = $object->toArray();
         }
 
+        $slug = isSet($object['url_slug']) ? $object['url_slug'] : 'no-slug';
+
         $parameters = array_merge(
             $object,
             array(
-                'slug' => $object['url_slug']
+                'slug' => $slug
             )
         );
 
