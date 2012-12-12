@@ -1,7 +1,9 @@
 2.0.0
 
-Removed all legacy code and stuff that no longer belongs in the system
+Removed all legacy code
+
 MCN\Object\Entity\Repository now supports sorting on relations as well as the root entity.
+MCN\Object\Hydrator now supports form annotations for hydrating
 
 1.0.3
 
