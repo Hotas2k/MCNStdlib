@@ -102,6 +102,11 @@ class Hydrator implements HydratorInterface
 
                 $association = $this->metadata->getAssociationMapping($field);
 
+                if (! $value instanceof AbstractObject) {
+
+                    $value = $this->em->getReference($association['targetEntity'], $value);
+                }
+
                 switch($association['type'])
                 {
                     case ClassMetadataInfo::ONE_TO_MANY:
