@@ -1,12 +1,11 @@
 <?php
 /**
  * @author Antoine Hedgecock <antoine@pmg.se>
+ * @author Jonas Eriksson <jonas@pmg.se>
  */
 
-/**
- * @namespace
- */
 namespace MCN\Object\Entity\Behavior;
+
 use DateTime;
 
 /**
@@ -20,6 +19,8 @@ trait SoftDeleteTrait
      * @var \DateTime|null
      *
      * @ORM\Column(type="datetime", nullable=true)
+     *
+     * @\Zend\Form\Annotation\Exclude
      */
     protected $deleted_at = null;
 
@@ -33,7 +34,8 @@ trait SoftDeleteTrait
 
     /**
      * @param mixed $timestamp
-     * @return SoftDelete
+     *
+     * @return self
      */
     public function setDeletedAt($timestamp = null)
     {

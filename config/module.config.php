@@ -41,15 +41,9 @@ return array(
     ),
 
     'service_manager' => array(
-
-        'invokables' => array(
-
-            'mcn.doctrine_logger' => 'Doctrine\DBAL\Logging\DebugStack'
-        ),
-
         'factories' => array(
-            'mcn.memcached'     => 'MCN\Factory\MemcachedFactory',
-            'mcn.sphinx_client' => 'MCN\Factory\SphinxClientFactory'
+
+            'mcn.annotationbuilder' => 'MCN\Factory\AnnotationBuilderFactory'
         )
     ),
 

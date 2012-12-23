@@ -38,7 +38,7 @@ class Http extends AbstractPlugin
             $sort = trim($this->controller->params('sort', null));
         }
 
-        if ($sort === null) {
+        if ($sort === null || empty($sort)) {
 
             return array($field, $direction);
         }
@@ -47,6 +47,7 @@ class Http extends AbstractPlugin
 
             return array(substr($sort, 1), 'DESC');
         }
+
         return array($sort, 'ASC');
     }
 

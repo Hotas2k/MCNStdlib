@@ -3,18 +3,23 @@
  * @author Antoine Hedgecock <antoine@pmg.se>
  */
 
-/**
- * @namespace
- */
 namespace MCN\Object\Entity\Behavior;
+
 use MCN\Object\Exception;
 
+/**
+ * @category MCN
+ * @package Object
+ * @subpackage EntityBehavior
+ */
 trait SlugTrait
 {
     /**
      * @var string
      *
      * @ORM\Column(type="string", nullable=true)
+     *
+     * @\Zend\Form\Annotation\Exclude
      */
     protected $url_slug;
 

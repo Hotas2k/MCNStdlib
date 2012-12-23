@@ -1,11 +1,9 @@
 <?php
 /**
  * @author Antoine Hedgecock <antoine@pmg.se>
+ * @author Jonas Eriksson <jonas@pmg.se>
  */
 
-/**
- * @namespace
- */
 namespace MCN\Object\Entity\Behavior;
 
 /**
@@ -19,6 +17,8 @@ trait TimestampableTrait
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
+     *
+     * @\Zend\Form\Annotation\Exclude
      */
     protected $created_at;
 
@@ -26,6 +26,8 @@ trait TimestampableTrait
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
+     *
+     * @\Zend\Form\Annotation\Exclude
      */
     protected $updated_at;
 

@@ -122,6 +122,8 @@ class Hydrator implements HydratorInterface
 
         foreach($data as $field => $value)
         {
+            if (empty($value)) continue;
+
             if ($this->metadata->hasAssociation($field)) {
 
                 $association = $this->metadata->getAssociationMapping($field);
@@ -221,7 +223,7 @@ class Hydrator implements HydratorInterface
 
             $value = (array) $value;
         }
-
+;
         $values = new ArrayCollection();
         foreach($value as $v) {
 
