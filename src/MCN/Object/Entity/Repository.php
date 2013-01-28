@@ -63,9 +63,10 @@ class Repository extends AbstractRepository
             }
 
             // Parameters matches a field in the entity so just do a simple eq
-            if (in_array($param, $this->metadata->fieldNames)) {
+            if (in_array($param, $this->metadata->getFieldNames())) {
 
-                $qb->add('where', $expr->eq($this->getRootEntityAlias() . '.' . $param, $value));
+                $qb->andWhere($expr->eq($this->getRootEntityAlias() . '.' . $param, $value));
+
             } else {
 
                 $exp = explode(':', $param);
@@ -79,34 +80,29 @@ class Repository extends AbstractRepository
 
                 list($field, $method) = $exp;
 
-                $field = strstr($field, '.') !== false ? $field : $this->getRootEntityAlias() . '.' . $field;
+                // check if a alias has been specified
+                $field = strstr($field, '.') === false ? $this->getRootEntityAlias() . '.' . $field : $field;
 
-                // check if we want to apply something to the field first
-                if (strstr($field, '|') !== false) {
+                switch ($method)
+                {
+                    case 'nlike':
+                        $qb->andWhere($expr->not($expr->like($field, $value)));
+                        break;
 
-                    list ($field, $func) = explode('|', $field);
+                    case 'null':
+                        $qb->andWhere($expr->{ $value == 'true' ? 'isNull' : 'isNotNull'}($field));
+                        break;
 
-                    $field = $expr->{$func}($field);
+                    default:
+                        if (! method_exists($expr, $method)) {
+                            throw new Exception\BadMethodCallException(
+                                sprintf('Invalid expression called, the method "%s" does not exist.', $method)
+                            );
+                        }
+
+                        $qb->andWhere($expr->$method($field, $value));
+                        break;
                 }
-
-                // The method not like does not exist so we create one
-                if ($method == 'nlike') {
-
-                    $qb->andWhere($expr->not($expr->like($field, $value)));
-
-                    continue;
-                }
-
-                // validate function
-                if (! method_exists($expr, $method)) {
-
-                    throw new Exception\BadMethodCallException(
-                        sprintf('Invalid expression called, the method "%s" does not exist.', $method)
-                    );
-                }
-
-                // append expression
-                $qb->andWhere($expr->$method($field, $value));
             }
         }
 

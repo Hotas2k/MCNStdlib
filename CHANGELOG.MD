@@ -1,3 +1,11 @@
+2.0.1
+========================
+
+MCN\Object\Entity\Repository
+* Cleaned up the Repository addParametersToQuery
+* Added a new expression <field>:null = true/false
+
+
 2.0.0
 ========================
 Removed all legacy code and stuff that no longer belongs in the system, and updated the ChangeLog to use markdown
