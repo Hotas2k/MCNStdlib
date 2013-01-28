@@ -378,9 +378,31 @@ class Repository extends AbstractRepository
         $pagination = new Paginator($query);
 
         // get the count
-        $count= $pagination->count();
+        $count = $pagination->count();
 
         // return the result
         return Pagination::create($result, $count, $qi);
+    }
+
+    public function count($qi = array())
+    {
+        if (is_array($qi)) {
+
+            $qi = new QueryInfo($qi);
+        }
+
+        // validate the query info object
+        if (! $qi instanceof QueryInfo) {
+
+            throw new Exception\InvalidArgumentException(
+                sprintf('%s required the first argument be an array or an instance of QueryInfo', __METHOD__)
+            );
+        }
+
+        // get the base query
+        $query = $this->getBaseQuery($qi);
+
+        $pagination = new Paginator($query);
+        return $pagination->count();
     }
 }
