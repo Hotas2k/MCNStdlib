@@ -14,11 +14,11 @@ MCN\Object\Entity\Repository
 
 * supports sorting on relations as well as the root entity.
 * supports wrapping fields in with functions by using | to suffix with the method name. 
- ```php
+ ```
     array('name|length:gte' => 5)
  ```
 translates to 
-```sql
+```
     LENGTH(name) > 5
 ```
 
