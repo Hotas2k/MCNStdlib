@@ -1,47 +1,21 @@
 <?php
 /**
  * @author Antoine Hedgecock <antoine@pmg.se>
+ * @author Jonas Eriksson <jonas@pmg.se>
+ *
+ * @copyright PMG Media Group AB
  */
 
-/**
- * @namespace
- */
 namespace MCN\View\Helper;
-use MCN\Object\AbstractObject,
-    Zend\View\Helper\AbstractHelper,
-    Zend\ServiceManager\ServiceLocatorInterface,
-    Zend\ServiceManager\ServiceLocatorAwareInterface;
+
+use MCN\Object\AbstractObject;
+use Zend\View\Helper\AbstractHelper;
 
 /**
  *
  */
-class SlugUrl extends AbstractHelper implements ServiceLocatorAwareInterface
+class SlugUrl extends AbstractHelper
 {
-    /**
-     * @var ServiceLocatorInterface
-     */
-    protected $sm;
-
-    /**
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return SlugUrl
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->sm = $serviceLocator;
-
-        return $this;
-    }
-
-    /**
-     * @return ServiceLocatorInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->sm;
-    }
-
     /**
      * @param String $name
      * @param mixed  $object
@@ -55,14 +29,15 @@ class SlugUrl extends AbstractHelper implements ServiceLocatorAwareInterface
             $object = $object->toArray();
         }
 
+        $slug = isSet($object['url_slug']) ? $object['url_slug'] : 'no-url-slug-specified';
+
         $parameters = array_merge(
             $object,
             array(
-                'slug' => $object['url_slug']
+                'slug' => $slug
             )
         );
 
-        return $this->getView()
-                    ->url($name, $parameters);
+        return $this->getView()->url($name, $parameters);
     }
 }

@@ -53,22 +53,46 @@ class Hydrator implements HydratorInterface
         {
             if (empty($value)) continue;
 
-            // Check if the value if a datetime and then format accordingly
-            if ($value instanceof Datetime) {
+            if ($metadata->hasAssociation($field)) {
 
-                switch($metadata->getTypeOfField($field))
-                {
-                    case Type::DATE:
-                        $value = $value->format('Y-m-d');
-                        break;
+                $mapping = $metadata->getAssociationMapping($field);
 
-                    case Type::DATETIME:
-                        $value = $value->format('Y-m-d H:i:s');
-                        break;
+                if ($mapping['type'] & ClassMetadataInfo::TO_ONE) {
 
-                    case Type::TIME:
-                        $value = $value->format('H:i:s');
-                        break;
+                    if (! $value instanceof AbstractObject) {
+
+                        throw new Exception\InvalidArgumentException('Invalid Abstract object given as relation.');
+                    }
+
+                    $targetKeyColumns = $mapping['sourceToTargetKeyColumns'];
+
+                    if (count($targetKeyColumns) > 1) {
+
+                        throw new \Exception('Not yet implemented');
+                    }
+
+                    $value = $value[current($targetKeyColumns)];
+                }
+
+            } else {
+
+                // Check if the value if a datetime and then format accordingly
+                if ($value instanceof Datetime) {
+
+                    switch($metadata->getTypeOfField($field))
+                    {
+                        case Type::DATE:
+                            $value = $value->format('Y-m-d');
+                            break;
+
+                        case Type::DATETIME:
+                            $value = $value->format('Y-m-d H:i:s');
+                            break;
+
+                        case Type::TIME:
+                            $value = $value->format('H:i:s');
+                            break;
+                    }
                 }
             }
 
@@ -98,6 +122,8 @@ class Hydrator implements HydratorInterface
 
         foreach($data as $field => $value)
         {
+            if (empty($value)) continue;
+
             if ($this->metadata->hasAssociation($field)) {
 
                 $association = $this->metadata->getAssociationMapping($field);
@@ -106,11 +132,28 @@ class Hydrator implements HydratorInterface
                 {
                     case ClassMetadataInfo::ONE_TO_MANY:
                     case ClassMetadataInfo::MANY_TO_MANY:
+                        if (! empty($value)) {
+
+                            if (! current($value) instanceof AbstractObject) {
+
+                                foreach ($value as &$v) {
+
+                                    $v = $this->em->find($association['targetEntity'], $v);
+                                }
+                            }
+                        }
+
                         $this->toMany($object, $field, $value, $association);
                         break;
 
                     case ClassMetadataInfo::ONE_TO_ONE:
                     case ClassMetadataInfo::MANY_TO_ONE:
+
+                        if (! $value instanceof AbstractObject) {
+
+                            $value = $this->em->find($association['targetEntity'], $value);
+                        }
+
                         $this->toOne($object, $field, $value, $association);
                         break;
                 }
@@ -180,7 +223,7 @@ class Hydrator implements HydratorInterface
 
             $value = (array) $value;
         }
-
+;
         $values = new ArrayCollection();
         foreach($value as $v) {
 

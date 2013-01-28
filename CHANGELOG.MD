@@ -2,8 +2,9 @@
 ========================
 
 MCN\Object\Entity\Repository
-* Cleaned up the Repository addParametersToQuery
+
 * Added a new expression <field>:null = true/false
+* Added a new method for counting rows
 
 
 2.0.0

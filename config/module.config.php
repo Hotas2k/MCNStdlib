@@ -37,20 +37,13 @@ return array(
         'invokables' => array(
             'http'          => 'MCN\Controller\Plugin\Http',
             'message'       => 'MCN\Controller\Plugin\Message',
-            'searchStorage' => 'MCN\Controller\Plugin\SearchStorage',
         )
     ),
 
     'service_manager' => array(
-
-        'invokables' => array(
-
-            'mcn.doctrine_logger' => 'Doctrine\DBAL\Logging\DebugStack'
-        ),
-
         'factories' => array(
-            'mcn.memcached'     => 'MCN\Factory\MemcachedFactory',
-            'mcn.sphinx_client' => 'MCN\Factory\SphinxClientFactory'
+
+            'mcn.annotationbuilder' => 'MCN\Factory\AnnotationBuilderFactory'
         )
     ),
 

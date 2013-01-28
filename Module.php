@@ -13,11 +13,14 @@ use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\Mvc\Router\RouteMatch;
 use MCN\View\Helper as ViewHelper;
+use Zend\Mvc\MvcEvent;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 
 /**
  * @category User
  */
-class Module implements ConfigProviderInterface, AutoloaderProviderInterface, ServiceProviderInterface, ViewHelperProviderInterface
+class Module implements ConfigProviderInterface, AutoloaderProviderInterface, ServiceProviderInterface,
+    ViewHelperProviderInterface
 {
     /**
      * Return an array for passing to Zend\Loader\AutoloaderFactory.
@@ -71,20 +74,6 @@ class Module implements ConfigProviderInterface, AutoloaderProviderInterface, Se
                     $validator->setObjectManager($sm->get('doctrine.entitymanager.ormdefault'));
 
                     return $validator;
-                },
-
-                'mcn.service.view'               => function($sm) {
-
-                    return new Service\View(
-                        $sm->get('doctrine.entitymanager.ormdefault')
-                    );
-                },
-
-                'mcn.service.search_storage'     => function($sm) {
-
-                    return new Service\SearchStorage(
-                        $sm->get('doctrine.entitymanager.ormdefault')
-                    );
                 }
             )
         );
