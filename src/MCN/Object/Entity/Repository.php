@@ -370,16 +370,18 @@ class Repository extends AbstractRepository
             return $result;
         }
 
-        // create a pagination instance of the query
-        $pagination = new Paginator($query);
-
         // get the count
-        $count = $pagination->count();
+        $count = ( new Paginator($query) )->count();
 
         // return the result
         return Pagination::create($result, $count, $qi);
     }
 
+    /**
+     * @param array $qi
+     * @return int|number
+     * @throws \MCN\Object\Exception\InvalidArgumentException
+     */
     public function count($qi = array())
     {
         if (is_array($qi)) {
@@ -398,7 +400,6 @@ class Repository extends AbstractRepository
         // get the base query
         $query = $this->getBaseQuery($qi);
 
-        $pagination = new Paginator($query);
-        return $pagination->count();
+        return ( new Paginator($query) )->count();
     }
 }

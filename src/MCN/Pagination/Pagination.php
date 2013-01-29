@@ -34,7 +34,7 @@ class Pagination implements Countable, IteratorAggregate
      * @param mixed $collection
      * @param array $options
      *
-     * @return \Pagination
+     * @return \MCN\Pagination\Pagination
      */
     public function __construct($collection, array $options = array())
     {
@@ -60,7 +60,7 @@ class Pagination implements Countable, IteratorAggregate
      * @param integer   $num_rows
      * @param QueryInfo $qi
      *
-     * @return \Pagination
+     * @return \MCN\Pagination\Pagination
      */
     static public function create(array $resultset, $num_rows, QueryInfo $qi)
     {
