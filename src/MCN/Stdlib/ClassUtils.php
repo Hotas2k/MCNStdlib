@@ -25,6 +25,11 @@ class ClassUtils
      */
     public static function uses($class, $trait)
     {
+        if (! is_object($class)) {
+
+            throw new Exception\InvalidArgumentException('First argument is expected to an object');
+        }
+
         $classes = array($class) + class_parents($class);
 
         foreach($classes as $class) {

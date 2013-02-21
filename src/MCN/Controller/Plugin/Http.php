@@ -19,6 +19,27 @@ use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 class Http extends AbstractPlugin
 {
     /**
+     * @param string $mimeType
+     * @return bool
+     */
+    public function acceptsMimeType($mimeType)
+    {
+        $request = $this->controller->getRequest();
+
+        /**
+         * @var $accept \Zend\Http\Header\Accept
+         */
+        $accept = $request->getHeaders()->get('Accept');
+
+        if (! $accept) {
+
+            return false;
+        }
+
+        return $accept->match($mimeType);
+    }
+
+    /**
      * Retrieves the sorting field and direction
      *
      * @param string  $field

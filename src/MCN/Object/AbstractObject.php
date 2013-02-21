@@ -9,6 +9,7 @@ use ArrayAccess;
 use MCN\Stdlib\NamingConvention;
 use Doctrine\Common\Persistence\Proxy;
 use Doctrine\Common\Collections\Collection;
+use ReflectionClass;
 
 /**
  * @category MCN
@@ -94,8 +95,8 @@ abstract class AbstractObject implements ArrayAccess
      */
     public function offsetUnset($offset)
     {
-        if($this->offsetExists($offset))
-        {
+        if($this->offsetExists($offset)) {
+
             $reflection = new ReflectionClass(get_called_class());
             $properties = $reflection->getDefaultProperties();
 
