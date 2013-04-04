@@ -1,7 +1,7 @@
 <?php
 return array(
     'modules' => array(
-        'MCN',
+        'MCNStdlib',
     ),
     'module_listener_options' => array(
         'config_glob_paths'    => array(

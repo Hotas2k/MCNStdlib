@@ -1,5 +1,5 @@
 {
-    "name": "mcn/mcn",
+    "name": "mcn/stdlib",
     "description": "Mac nibblets core functionality",
     "type": "module",
     "authors": [
@@ -12,13 +12,20 @@
             "email": "jonas@pmg.se"
         }
     ],
-    "require": {
-        "php": ">=5.3.3",
-        "zendframework/zendframework": "dev-develop"
+
+    "suggests:": {
+        "bacon/bacon-string-utils": "If you wish to use the SlugTrait, rev: #145c8eabb8e743dad8bcef05f1333d71c0439a0b",
+        "doctrine/orm": "If you wish to use any of the entity traits"
     },
+
+    "require": {
+        "php": ">=5.4.0",
+        "doctrine/common": "2.3.*"
+    },
+
     "autoload": {
         "psr-0": {
-            "MCN": "src/"
+            "MCNStdlib": "src/"
         },
         "classmap": [
             "./Module.php"

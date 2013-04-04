@@ -3,24 +3,20 @@
  * @author Antoine Hedgecock <antoine@pmg.se>
  */
 
-namespace MCN;
+namespace MCNStdlib;
 
 use Zend\Log\Logger;
+use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceManager;
-use Zend\ModuleManager\Feature\ConfigProviderInterface;
-use Zend\ModuleManager\Feature\ServiceProviderInterface;
-use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
-use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\Mvc\Router\RouteMatch;
-use MCN\View\Helper as ViewHelper;
-use Zend\Mvc\MvcEvent;
+use MCNStdlib\View\Helper as ViewHelper;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 
 /**
- * @category User
+ * Class Module
+ * @package MCNStdLib
  */
-class Module implements ConfigProviderInterface, AutoloaderProviderInterface, ServiceProviderInterface,
-    ViewHelperProviderInterface
+class Module
 {
     /**
      * Return an array for passing to Zend\Loader\AutoloaderFactory.
@@ -32,7 +28,7 @@ class Module implements ConfigProviderInterface, AutoloaderProviderInterface, Se
         return array(
             'Zend\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
-                    'MCN' => __DIR__ . '/src/MCN'
+                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__
                 ),
             ),
         );
@@ -52,48 +48,20 @@ class Module implements ConfigProviderInterface, AutoloaderProviderInterface, Se
      * Expected to return \Zend\ServiceManager\Config object or array to
      * seed such an object.
      *
-     * @return array
-     */
-    public function getServiceConfig()
-    {
-        return array(
-            'shared' => array(
-
-                'mcn.validator.object_exists' => false
-            ),
-
-            'factories' => array(
-                'mcn.object.hydrator'         => function($sm) {
-
-                    return new Object\Hydrator($sm->get('doctrine.entitymanager.ormdefault'));
-                },
-
-                'mcn.validator.object_exists' => function($sm) {
-
-                    $validator = new Validator\ObjectExists();
-                    $validator->setObjectManager($sm->get('doctrine.entitymanager.ormdefault'));
-
-                    return $validator;
-                }
-            )
-        );
-    }
-
-    /**
-     * Expected to return \Zend\ServiceManager\Config object or array to
-     * seed such an object.
-     *
      * @return array|\Zend\ServiceManager\Config
      */
     public function getViewHelperConfig()
     {
         return array(
             'factories' => array(
-                'sortUrl' => function($sm) {
+                'sortUrl' => function(ServiceLocatorInterface $sm) {
 
                     $helper = new View\Helper\SortUrl();
 
-                    $routeMatch = $sm->getServiceLocator()->get('application')->getMvcEvent()->getRouteMatch();
+                    $routeMatch = $sm->getServiceLocator()
+                                     ->get('application')
+                                     ->getMvcEvent()
+                                     ->getRouteMatch();
 
                     if ($routeMatch instanceof RouteMatch) {
 
