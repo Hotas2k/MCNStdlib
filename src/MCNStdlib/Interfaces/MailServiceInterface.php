@@ -39,7 +39,7 @@
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
  */
 
-namespace MCNStdlib\Interfaces\Mail;
+namespace MCNStdlib\Interfaces;
 
 /**
  * Class MailServiceInterface
